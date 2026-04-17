@@ -9,9 +9,31 @@
   <link href="https://api.fontshare.com/v2/css?f[]=neue-montreal@300,400,500,700&display=swap" rel="stylesheet" />
 
   <style>
+    @font-face {
+      font-family: 'Suisse Intl';
+      src: url('public/SuisseIntl-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Suisse Intl';
+      src: url('public/SuisseIntl-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Suisse Intl';
+      src: url('public/SuisseIntl-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ─── Tokens ───────────────────────────────────────── */
     :root {
-      --bg:          #000000;
+      --bg:          #0d0d0d;
       --bg-1:        #0C0C0C;
       --bg-2:        #141414;
       --bg-3:        #1A1A1A;
@@ -26,6 +48,12 @@
       --max-w:       1200px;
       --pad:         clamp(1.5rem, 5vw, 5rem);
       --radius:      8px;
+    }
+
+    /* ─── Global headings ───────────────────────────────── */
+    h2 {
+      font-family: 'Suisse Intl', 'Suisse Int\'l', var(--font);
+      font-size: 48px;
     }
 
     /* ─── Reset ─────────────────────────────────────────── */
@@ -84,28 +112,25 @@
 
     .btn-primary { background: #fff; color: #000; }
     .btn-secondary {
-      background: transparent;
+      background: #222222;
       color: var(--text-2);
-      border: 1px solid var(--border-2);
+      border: none;
     }
-    .btn-secondary:hover { color: #fff; border-color: rgba(255,255,255,0.35); opacity: 1; }
+    .btn-secondary:hover { color: #fff; border-color: transparent; background: #222222; opacity: 1; }
 
     /* ─── Header ─────────────────────────────────────────── */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 200;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
+      background: #0d0d0d;
     }
 
     .nav {
       max-width: var(--max-w);
       margin: 0 auto;
       padding: 0 var(--pad);
-      height: 60px;
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -113,29 +138,115 @@
     }
 
     .nav-logo {
-      font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      color: #fff;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .nav-logo img {
+      height: 22px;
+      width: auto;
+      display: block;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
       gap: 0.25rem;
+      margin-left: auto;
     }
 
-    .nav-links a {
+    .nav-links a,
+    .nav-item > .nav-trigger {
       font-size: 0.875rem;
       font-weight: 400;
       color: var(--text-2);
       padding: 0.375rem 0.75rem;
       border-radius: 6px;
       transition: color 150ms, background 150ms;
+      background: none;
+      border: none;
+      font-family: var(--font);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .nav-item:hover > .nav-trigger {
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Dropdown */
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-trigger svg {
+      width: 10px;
+      height: 10px;
+      transition: transform 200ms ease;
+      opacity: 0.5;
+    }
+
+    .nav-item:hover .nav-trigger svg { transform: rotate(180deg); opacity: 1; }
+
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      left: 0;
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 0.4rem;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      transform: translateY(-6px);
+      z-index: 300;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    }
+
+    .nav-item:hover .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      padding: 0.65rem 0.875rem;
+      border-radius: 8px;
+      transition: background 140ms;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-dropdown-item:hover { background: rgba(255,255,255,0.07); }
+
+    .nav-dropdown-item-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 0.15rem;
+      text-align: left;
+      width: 100%;
+    }
+
+    .nav-dropdown-item-desc {
+      font-size: 0.8rem;
+      color: var(--text-2);
+      font-weight: 400;
+      text-align: left;
+      width: 100%;
+    }
 
     .nav-right {
       display: flex;
@@ -146,8 +257,8 @@
 
     /* ─── Hero ───────────────────────────────────────────── */
     .hero {
-      padding-top: calc(60px + clamp(5rem, 12vw, 10rem));
-      padding-bottom: clamp(4rem, 10vw, 9rem);
+      padding-top: calc(70px + 140px);
+      padding-bottom: 70px;
     }
 
     .hero-tag {
@@ -166,21 +277,22 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.75rem, 7.5vw, 6.75rem);
+      font-size: 70px;
       font-weight: 500;
+      font-family: 'Suisse Intl', 'Suisse Int\'l', var(--font);
       line-height: 1.0;
       letter-spacing: -0.035em;
       color: #fff;
-      max-width: 15ch;
+      max-width: 100%;
       margin-bottom: 2rem;
     }
 
     .hero h1 span { color: var(--text-2); }
 
     .hero-desc {
-      font-size: 1.0625rem;
+      font-size: 24px;
       color: var(--text-2);
-      max-width: 46ch;
+      max-width: none;
       line-height: 1.65;
       margin-bottom: 2.5rem;
       font-weight: 300;
@@ -251,7 +363,6 @@
     /* ─── Clients ────────────────────────────────────────── */
     .clients {
       padding: 4rem 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .clients-label {
@@ -291,27 +402,45 @@
     /* ─── Stats ──────────────────────────────────────────── */
     .stats {
       padding: clamp(4rem, 8vw, 7rem) 0;
-      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .stats-header h2 {
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .stats-header p {
+      font-size: 24px;
+      color: var(--text-2);
+      max-width: 40ch;
+      line-height: 1.5;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
+      gap: 1rem;
     }
 
     .stat-item {
+      background: #222222;
+      border-radius: 16px;
       padding: 2.5rem 2rem;
-      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
-    .stat-item:last-child { border-right: none; }
-
     .stat-num {
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(2rem, 4vw, 2.75rem);
       font-weight: 500;
       letter-spacing: -0.04em;
       color: #fff;
@@ -322,14 +451,12 @@
     .stat-desc {
       font-size: 0.875rem;
       color: var(--text-2);
-      font-weight: 300;
-      max-width: 22ch;
+      font-weight: 400;
     }
 
     /* ─── Services ───────────────────────────────────────── */
     .services {
       padding: clamp(4rem, 8vw, 7rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .services-header {
@@ -427,7 +554,6 @@
     /* ─── Feature / About ────────────────────────────────── */
     .feature {
       padding: clamp(5rem, 10vw, 9rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .feature-inner {
@@ -531,7 +657,6 @@
     /* ─── Work / Portfolio ───────────────────────────────── */
     .work {
       padding: clamp(4rem, 8vw, 7rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .work-header {
@@ -626,7 +751,6 @@
     /* ─── Process ────────────────────────────────────────── */
     .process {
       padding: clamp(4rem, 8vw, 7rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .process-header { margin-bottom: 3rem; }
@@ -678,7 +802,6 @@
     /* ─── Testimonial ────────────────────────────────────── */
     .testimonial {
       padding: clamp(5rem, 10vw, 9rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .testimonial blockquote {
@@ -728,131 +851,85 @@
     /* ─── Pricing ────────────────────────────────────────── */
     .pricing {
       padding: clamp(4rem, 8vw, 7rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
-    .pricing-header { margin-bottom: 3rem; }
+    .pricing-header { margin-bottom: 2.5rem; }
 
-    .pricing-header h2 {
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
-      font-weight: 500;
-      letter-spacing: -0.03em;
-      margin-top: 1rem;
+    .pricing-header p.label { margin-bottom: 0.75rem; }
+
+    .pricing-header p.pricing-sub {
+      font-size: 1.125rem;
+      color: var(--text-2);
+      max-width: 38ch;
+      line-height: 1.55;
+      margin-top: 0.5rem;
     }
 
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
+      gap: 1rem;
     }
 
     .price-card {
-      background: var(--bg);
+      background: #1a1a1a;
+      border-radius: 16px;
       padding: 2rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
 
-    .price-card.featured { background: var(--bg-2); }
-
-    .price-card-top {
+    .price-card-icon {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-
-    .price-name {
+      align-items: center;
+      gap: 0.6rem;
       font-size: 0.875rem;
       font-weight: 500;
       color: #fff;
     }
 
-    .price-badge {
-      font-size: 0.625rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--border-2);
-      color: var(--text-2);
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
+    .price-card-icon svg {
+      width: 20px;
+      height: 20px;
+      opacity: 0.6;
     }
 
-    .price-amount {
-      font-size: 2.25rem;
+    .price-stat {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
       font-weight: 500;
       letter-spacing: -0.04em;
       color: #fff;
       line-height: 1;
     }
 
-    .price-amount span {
-      font-size: 0.9rem;
-      color: var(--text-2);
-      font-weight: 300;
-      letter-spacing: 0;
-    }
-
-    .price-desc {
-      font-size: 0.8125rem;
-      color: var(--text-2);
-      font-weight: 300;
-      line-height: 1.55;
-    }
-
-    .price-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      flex: 1;
-    }
-
-    .price-features li {
-      font-size: 0.8125rem;
-      color: var(--text-2);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      line-height: 1.4;
-      font-weight: 300;
-    }
-
-    .price-features li::before {
-      content: '—';
-      color: var(--text-3);
-      flex-shrink: 0;
-      font-size: 0.75rem;
-      margin-top: 0.05rem;
-    }
-
-    .price-cta {
-      width: 100%;
-      padding: 0.625rem;
-      border-radius: 999px;
-      font-family: var(--font);
+    .price-stat-desc {
       font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid var(--border-2);
-      background: transparent;
       color: var(--text-2);
-      transition: all 150ms;
+      margin-top: -0.75rem;
     }
 
-    .price-cta:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
-    .price-cta.featured { background: #fff; color: #000; border-color: #fff; }
-    .price-cta.featured:hover { opacity: 0.85; }
+    .price-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .price-brand {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .price-brand-desc {
+      font-size: 0.875rem;
+      color: var(--text-2);
+      line-height: 1.55;
+      font-weight: 300;
+    }
 
     /* ─── FAQ ────────────────────────────────────────────── */
     .faq {
       padding: clamp(4rem, 8vw, 7rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .faq-inner {
@@ -936,7 +1013,6 @@
     /* ─── CTA Band ───────────────────────────────────────── */
     .cta-band {
       padding: clamp(5rem, 10vw, 10rem) 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .cta-band h2 {
@@ -1049,7 +1125,7 @@
     /* ─── Responsive ─────────────────────────────────────── */
     @media (max-width: 64rem) {
       .services-grid    { grid-template-columns: 1fr 1fr; }
-      .pricing-grid     { grid-template-columns: 1fr; max-width: 28rem; }
+      .pricing-grid     { grid-template-columns: 1fr; }
       .feature-inner    { grid-template-columns: 1fr; }
       .footer-top       { grid-template-columns: 1fr 1fr; }
       .work-grid        { grid-template-columns: 1fr; }
@@ -1075,14 +1151,51 @@
   <!-- ── Header ──────────────────────────────────────────── -->
   <header>
     <nav class="nav">
-      <a href="#" class="nav-logo">Fintent</a>
+      <a href="#" class="nav-logo"><img src="public/icon.svg" alt="Fintent" /></a>
       <div class="nav-links">
+        <!-- Product -->
+        <div class="nav-item">
+          <button class="nav-trigger">
+            Product
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3.5l3 3 3-3"/>
+            </svg>
+          </button>
+          <div class="nav-dropdown">
+            <a href="#" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">Test 1</span>
+              <span class="nav-dropdown-item-desc">Description for test option one</span>
+            </a>
+            <a href="#" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">Test 2</span>
+              <span class="nav-dropdown-item-desc">Description for test option two</span>
+            </a>
+          </div>
+        </div>
+
         <a href="#services">Services</a>
-        <a href="#work">Product</a>
-        <a href="#process">Blog</a>
-      </div>
-      <div class="nav-right">
-        <a href="#contact" class="btn btn-primary">Contact us</a>
+
+        <!-- Company -->
+        <div class="nav-item">
+          <button class="nav-trigger">
+            Company
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3.5l3 3 3-3"/>
+            </svg>
+          </button>
+          <div class="nav-dropdown">
+            <a href="#" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">About</span>
+              <span class="nav-dropdown-item-desc">Our story, mission, and team</span>
+            </a>
+            <a href="#" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">Careers</span>
+              <span class="nav-dropdown-item-desc">Join us and shape finance</span>
+            </a>
+          </div>
+        </div>
+
+        <a href="#contact">Contact</a>
       </div>
     </nav>
   </header>
@@ -1090,67 +1203,27 @@
   <!-- ── Hero ────────────────────────────────────────────── -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-tag">
-        <div class="hero-dot"></div>
-        <span class="label">Finance Design Agency — Est. 2026</span>
-      </div>
-      <h1>Design that<br><span>moves capital.</span></h1>
+
+      <h1>Solution we crafted to<br><span>make human lifes easier</span></h1>
       <p class="hero-desc">
-        We build brand identities, digital products, and data experiences for financial institutions who believe clarity is the ultimate advantage.
+        We build brand identities, digital products, and data experiences<br>for institutions who believe clarity is the ultimate advantage.
       </p>
       <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary">Start free trial</a>
-        <a href="#services" class="btn btn-secondary">See how it works →</a>
+        <a href="#contact" class="btn btn-secondary">Contact us</a>
       </div>
 
-      <!-- Transaction strip -->
-      <div class="hero-strip">
-        <div class="strip-item">
-          <span class="strip-code">Meridian Capital — Brand v2.0</span>
-          <span class="strip-badge green">Delivered</span>
-        </div>
-        <div class="strip-sep"></div>
-        <div class="strip-item">
-          <span class="strip-code">Vault Dashboard — Design System</span>
-          <span class="strip-badge amber">In progress</span>
-        </div>
-        <div class="strip-sep"></div>
-        <div class="strip-item">
-          <span class="strip-code">Arcta — IPO Motion Kit</span>
-          <span class="strip-badge green">Delivered</span>
-        </div>
-        <div class="strip-sep"></div>
-        <div class="strip-item">
-          <span class="strip-code">Foundry ESG — Data Viz Report</span>
-          <span class="strip-badge green">Delivered</span>
-        </div>
-        <div class="strip-sep"></div>
-        <div class="strip-item">
-          <span class="strip-code">Crestline Wealth — Rebrand</span>
-          <span class="strip-badge green">Delivered</span>
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- ── Clients ───────────────────────────────────────────── -->
-  <section class="clients">
-    <div class="wrap">
-      <p class="label clients-label">Trusted by leading financial firms</p>
-      <div class="clients-grid">
-        <div class="client-cell"><span class="client-name">Meridian Capital</span></div>
-        <div class="client-cell"><span class="client-name">Vault</span></div>
-        <div class="client-cell"><span class="client-name">Arcta</span></div>
-        <div class="client-cell"><span class="client-name">Foundry</span></div>
-        <div class="client-cell"><span class="client-name">Crestline</span></div>
-        <div class="client-cell"><span class="client-name">Northbrook</span></div>
-      </div>
-    </div>
-  </section>
 
   <!-- ── Stats ─────────────────────────────────────────────── -->
   <section class="stats">
     <div class="wrap">
+      <div class="stats-header">
+        <h2>Proven at scale</h2>
+        <p>Fintent has shaped brands for billions in AUM, for dozens of clients, across every major financial market.</p>
+      </div>
       <div class="stats-grid">
         <div class="stat-item">
           <div class="stat-num">$2.1T+</div>
@@ -1368,58 +1441,45 @@
   <section class="pricing">
     <div class="wrap">
       <div class="pricing-header">
-        <p class="label">Pricing</p>
-        <h2>Pricing to fit your needs.</h2>
+        <h2>Financial brands that scale with Fintent</h2>
+        <p class="pricing-sub">The fastest growing, most ambitious financial brands build their identity with Fintent.</p>
       </div>
       <div class="pricing-grid">
 
         <div class="price-card">
-          <div class="price-card-top"><span class="price-name">Starter</span></div>
-          <div class="price-amount">$12 <span>/mo</span></div>
-          <p class="price-desc">Small teams getting started with shared inboxes</p>
-          <ul class="price-features">
-            <li>Shared inbox for up to 2 mailboxes</li>
-            <li>Tagging & assignment</li>
-            <li>Private notes</li>
-            <li>Automatic replies</li>
-            <li>Email support</li>
-          </ul>
-          <button class="price-cta">Start free trial</button>
-        </div>
-
-        <div class="price-card featured">
-          <div class="price-card-top">
-            <span class="price-name">Growth</span>
-            <span class="price-badge">Most popular</span>
+          <div class="price-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/></svg>
+            Brand Identity
           </div>
-          <div class="price-amount">$49 <span>/mo</span></div>
-          <p class="price-desc">Growing teams needing collaboration and insights</p>
-          <ul class="price-features">
-            <li>Everything in Starter</li>
-            <li>Inbox Agent</li>
-            <li>Unlimited mailboxes</li>
-            <li>Collision detection</li>
-            <li>Snippets and templates</li>
-            <li>Reporting dashboard</li>
-            <li>Slack integration</li>
-          </ul>
-          <button class="price-cta featured">Start free trial</button>
+          <div class="price-stat">84+</div>
+          <p class="price-stat-desc">brands launched globally</p>
+          <div class="price-divider"></div>
+          <p class="price-brand">Meridian Capital</p>
+          <p class="price-brand-desc">Meridian partnered with Fintent to rebuild their brand from the ground up ahead of a Series B raise.</p>
         </div>
 
         <div class="price-card">
-          <div class="price-card-top"><span class="price-name">Pro</span></div>
-          <div class="price-amount">$299 <span>/mo</span></div>
-          <p class="price-desc">Support-focused organizations and larger teams</p>
-          <ul class="price-features">
-            <li>Everything in Growth</li>
-            <li>Custom roles & permissions</li>
-            <li>Automation engine</li>
-            <li>API access</li>
-            <li>SLA tracking</li>
-            <li>SSO support</li>
-            <li>SOC 2 compliance</li>
-          </ul>
-          <button class="price-cta">Start free trial</button>
+          <div class="price-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg>
+            Digital Products
+          </div>
+          <div class="price-stat">$2.1T+</div>
+          <p class="price-stat-desc">AUM on platforms we've designed</p>
+          <div class="price-divider"></div>
+          <p class="price-brand">Vault Dashboard</p>
+          <p class="price-brand-desc">Vault's wealth management platform serves HNWI clients with a Fintent-designed interface built for trust.</p>
+        </div>
+
+        <div class="price-card">
+          <div class="price-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+            Motion & Data Viz
+          </div>
+          <div class="price-stat">99%</div>
+          <p class="price-stat-desc">client retention rate</p>
+          <div class="price-divider"></div>
+          <p class="price-brand">Arcta — IPO Kit</p>
+          <p class="price-brand-desc">Arcta's public market debut was backed by Fintent motion work that made complex data feel human.</p>
         </div>
 
       </div>
