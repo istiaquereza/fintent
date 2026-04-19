@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Fintent</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=neue-montreal@300,400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'Suisse Intl';
+      src: url('public/SuisseIntl-Regular.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Suisse Intl';
+      src: url('public/SuisseIntl-Medium.ttf') format('truetype');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Suisse Intl';
+      src: url('public/SuisseIntl-Bold.ttf') format('truetype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --bg:      #0d0d0d;
+      --text:    #ffffff;
+      --text-2:  #888888;
+      --text-3:  #444444;
+      --border:  rgba(255,255,255,0.08);
+      --green:   #4ADE80;
+      --font:    'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      --max-w:   1200px;
+      --pad:     clamp(1.5rem, 5vw, 5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+
+    h2 {
+      font-family: 'Suisse Intl', var(--font);
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: #fff;
+      line-height: 1.05;
+    }
+
+    .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad); }
+
+    /* ── Nav ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: #0d0d0d;
+    }
+    .nav {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad);
+      height: 70px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 22px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
+    .nav-links a, .nav-item > .nav-trigger {
+      font-size: 0.875rem; font-weight: 400; color: var(--text-2);
+      padding: 0.375rem 0.75rem; border-radius: 6px;
+      transition: color 150ms, background 150ms;
+      background: none; border: none; font-family: var(--font); cursor: pointer;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .nav-item:hover > .nav-trigger { color: #fff; background: rgba(255,255,255,0.1); }
+    .nav-item { position: relative; }
+    .nav-trigger svg { width: 10px; height: 10px; transition: transform 200ms; opacity: 0.5; }
+    .nav-item:hover .nav-trigger svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown {
+      position: absolute; top: calc(100% + 0.4rem); left: 0;
+      background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 0.4rem; min-width: 200px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      transform: translateY(-6px); z-index: 300;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+    .nav-dropdown-item {
+      display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+      padding: 0.65rem 0.875rem; border-radius: 8px; transition: background 140ms;
+      cursor: pointer; text-decoration: none;
+    }
+    .nav-dropdown-item:hover { background: rgba(255,255,255,0.07); }
+    .nav-dropdown-item-title { font-size: 0.875rem; font-weight: 500; color: #fff; margin-bottom: 0.15rem; text-align: left; width: 100%; }
+    .nav-dropdown-item-desc { font-size: 0.8rem; color: var(--text-2); font-weight: 400; text-align: left; width: 100%; }
+
+    /* ── Page ── */
+    .page-hero {
+      padding-top: calc(70px + 100px);
+      padding-bottom: 80px;
+    }
+    .page-hero .label {
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 1.5rem; display: block;
+    }
+    .page-hero h1 {
+      font-family: 'Suisse Intl', var(--font);
+      font-size: 70px; font-weight: 500; letter-spacing: -0.035em;
+      color: #fff; line-height: 1.0; margin-bottom: 2rem; max-width: 16ch;
+    }
+    .page-hero h1 span { color: var(--text-2); }
+    .page-hero p {
+      font-size: 1.125rem; color: var(--text-2); max-width: 52ch; line-height: 1.65;
+    }
+
+    .divider { height: 1px; background: var(--border); }
+
+    /* ── Story ── */
+    .story { padding: 80px 0; }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .story-grid h2 { margin-bottom: 0; }
+    .story-body p {
+      font-size: 1rem; color: var(--text-2); line-height: 1.75; margin-bottom: 1.25rem;
+    }
+
+    /* ── Values ── */
+    .values { padding: 80px 0; }
+    .values h2 { margin-bottom: 3rem; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .value-item { padding: 2rem; background: var(--bg); }
+    .value-num { font-size: 0.75rem; color: var(--text-3); letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .value-title { font-size: 1.125rem; font-weight: 500; color: #fff; margin-bottom: 0.5rem; }
+    .value-desc { font-size: 0.875rem; color: var(--text-2); line-height: 1.6; }
+
+    /* ── Team ── */
+    .team { padding: 80px 0; }
+    .team h2 { margin-bottom: 3rem; }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .team-card { background: #1a1a1a; border-radius: 12px; overflow: hidden; }
+    .team-avatar {
+      width: 100%; aspect-ratio: 1; background: #252525;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; font-weight: 500; color: var(--text-3);
+      font-family: 'Suisse Intl', var(--font);
+    }
+    .team-info { padding: 1.25rem; }
+    .team-name { font-size: 1rem; font-weight: 500; color: #fff; margin-bottom: 0.25rem; }
+    .team-role { font-size: 0.8125rem; color: var(--text-2); }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--border); padding: 2.5rem 0; margin-top: 80px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .footer-bottom p { font-size: 0.8125rem; color: var(--text-3); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.8125rem; color: var(--text-3); transition: color 150ms; }
+    .footer-links a:hover { color: var(--text-2); }
+
+    /* Mega menu */
+    .nav-mega {
+      position: absolute; top: calc(100% + 0.4rem); left: 0;
+      background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 0.5rem; min-width: 540px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      transform: translateY(-6px); z-index: 300;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+      display: flex; gap: 0.5rem;
+    }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+    .nav-mega-list { display: flex; flex-direction: column; flex: 1; gap: 0.1rem; }
+    .nav-mega-item { display: flex; align-items: center; gap: 0.875rem; padding: 0.65rem 0.75rem; border-radius: 10px; text-decoration: none; transition: background 140ms; cursor: pointer; }
+    .nav-mega-item:hover { background: rgba(255,255,255,0.07); }
+    .nav-mega-item:hover .nav-mega-item-icon { border-color: rgba(255,255,255,0.2); }
+    .nav-mega-item-icon { width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 140ms; }
+    .nav-mega-item-icon svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.6); }
+    .nav-mega-item-text { display: flex; flex-direction: column; gap: 0.1rem; }
+    .nav-mega-item-title { font-size: 0.875rem; font-weight: 500; color: #fff; }
+    .nav-mega-item-desc { font-size: 0.775rem; color: var(--text-2); }
+    .nav-mega-visual { width: 160px; flex-shrink: 0; background: #222222; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .nav-mega-visual svg { width: 56px; height: 56px; opacity: 0.25; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="nav">
+      <a href="index.html" class="nav-logo"><img src="public/icon.svg" alt="Fintent" /></a>
+      <div class="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger">Product
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <div class="nav-dropdown">
+            <a href="#" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">Test 1</span>
+              <span class="nav-dropdown-item-desc">Description for test option one</span>
+            </a>
+            <a href="#" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">Test 2</span>
+              <span class="nav-dropdown-item-desc">Description for test option two</span>
+            </a>
+          </div>
+        </div>
+        <!-- Services mega menu -->
+        <div class="nav-item">
+          <button class="nav-trigger">
+            Services
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <div class="nav-mega">
+            <div class="nav-mega-list">
+              <a href="index.html#services" class="nav-mega-item">
+                <div class="nav-mega-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17.5h7M17.5 14v7"/></svg>
+                </div>
+                <div class="nav-mega-item-text">
+                  <span class="nav-mega-item-title">Brand Identity</span>
+                  <span class="nav-mega-item-desc">Marks, systems & visual language</span>
+                </div>
+              </a>
+              <a href="index.html#services" class="nav-mega-item">
+                <div class="nav-mega-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <div class="nav-mega-item-text">
+                  <span class="nav-mega-item-title">Digital Products</span>
+                  <span class="nav-mega-item-desc">Dashboards, portals & interfaces</span>
+                </div>
+              </a>
+              <a href="index.html#services" class="nav-mega-item">
+                <div class="nav-mega-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                </div>
+                <div class="nav-mega-item-text">
+                  <span class="nav-mega-item-title">Motion & Data Viz</span>
+                  <span class="nav-mega-item-desc">Charts, animation & narrative data</span>
+                </div>
+              </a>
+              <a href="index.html#services" class="nav-mega-item">
+                <div class="nav-mega-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                </div>
+                <div class="nav-mega-item-text">
+                  <span class="nav-mega-item-title">Design Systems</span>
+                  <span class="nav-mega-item-desc">Scalable foundations & documentation</span>
+                </div>
+              </a>
+            </div>
+            <div class="nav-mega-visual">
+              <svg viewBox="0 0 80 80" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="40" cy="40" r="30"/>
+                <circle cx="40" cy="40" r="18"/>
+                <polygon points="40,28 50,48 30,48" fill="white" stroke="none" opacity="0.9"/>
+                <circle cx="40" cy="10" r="2" fill="white" opacity="0.4"/>
+                <circle cx="40" cy="70" r="2" fill="white" opacity="0.4"/>
+                <circle cx="10" cy="40" r="2" fill="white" opacity="0.4"/>
+                <circle cx="70" cy="40" r="2" fill="white" opacity="0.4"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button class="nav-trigger">Company
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <div class="nav-dropdown">
+            <a href="about.html" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">About</span>
+              <span class="nav-dropdown-item-desc">Our story, mission, and team</span>
+            </a>
+            <a href="careers.html" class="nav-dropdown-item">
+              <span class="nav-dropdown-item-title">Careers</span>
+              <span class="nav-dropdown-item-desc">Join us and shape finance</span>
+            </a>
+          </div>
+        </div>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="label">About Fintent</span>
+      <h1>We design for<br><span>those who move</span><br>capital.</h1>
+      <p>Fintent is a specialist design studio working exclusively within the financial sector — helping organisations articulate their value with rigour, restraint, and intention.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Story -->
+  <section class="story">
+    <div class="wrap">
+      <div class="story-grid">
+        <h2>Built for finance.<br>Built with purpose.</h2>
+        <div class="story-body">
+          <p>Fintent was founded in 2026 with a single belief: that financial brands deserve design that matches their ambition. Too often, the sector settles for generic — safe palettes, forgettable logos, interfaces that obscure rather than clarify.</p>
+          <p>We exist to change that. Every engagement starts with deep sector knowledge and ends with work that earns the trust of clients, investors, and partners.</p>
+          <p>We are a small, senior team. No juniors doing the work while partners take the credit. When you work with Fintent, you work with the people who built our reputation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Values -->
+  <section class="values">
+    <div class="wrap">
+      <h2>What we stand for</h2>
+      <div class="values-grid">
+        <div class="value-item">
+          <div class="value-num">01</div>
+          <div class="value-title">Clarity over complexity</div>
+          <p class="value-desc">We believe great financial design simplifies without dumbing down. Complexity is a problem, not a feature.</p>
+        </div>
+        <div class="value-item">
+          <div class="value-num">02</div>
+          <div class="value-title">Rigour at every step</div>
+          <p class="value-desc">We apply the same discipline to a typeface choice as to a brand architecture. Nothing is arbitrary.</p>
+        </div>
+        <div class="value-item">
+          <div class="value-num">03</div>
+          <div class="value-title">Senior-only delivery</div>
+          <p class="value-desc">Every project is led and delivered by senior designers. The work you see in our portfolio is the work you get.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Team -->
+  <section class="team">
+    <div class="wrap">
+      <h2>The team</h2>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">IR</div>
+          <div class="team-info">
+            <div class="team-name">Istiaque Reza</div>
+            <div class="team-role">Founder & Design Director</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">SM</div>
+          <div class="team-info">
+            <div class="team-name">Sara Melin</div>
+            <div class="team-role">Senior Brand Designer</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">JK</div>
+          <div class="team-info">
+            <div class="team-name">James Kho</div>
+            <div class="team-role">Product Design Lead</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-bottom">
+        <p>© 2026 Fintent. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="about.html">About</a>
+          <a href="careers.html">Careers</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CMS content injection -->
+  <script>
+  (function () {
+    var saved = localStorage.getItem('fintent_content');
+    if (!saved) return;
+    var d; try { d = JSON.parse(saved); } catch(e) { return; }
+    function setText(sel, field) {
+      var el = document.querySelector(sel);
+      if (el && d[field] !== undefined) el.textContent = d[field];
+    }
+
+    /* ── About hero ── */
+    setText('.page-hero h1', 'about_title');
+    setText('.page-hero p',  'about_sub');
+
+    /* ── Story section ── */
+    setText('.story-grid h2',             'about_story_h');
+    var paras = document.querySelectorAll('.story-body p');
+    if (paras[0] && d.about_story_p1 !== undefined) paras[0].textContent = d.about_story_p1;
+    if (paras[1] && d.about_story_p2 !== undefined) paras[1].textContent = d.about_story_p2;
+
+    /* ── Team ── */
+    var names = document.querySelectorAll('.team-name');
+    var roles = document.querySelectorAll('.team-role');
+    [['team1_name','team1_role'],['team2_name','team2_role'],['team3_name','team3_role']]
+      .forEach(function(pair, i) {
+        if (names[i] && d[pair[0]] !== undefined) names[i].textContent = d[pair[0]];
+        if (roles[i] && d[pair[1]] !== undefined) roles[i].textContent = d[pair[1]];
+      });
+  })();
+  </script>
+
+</body>
+</html>

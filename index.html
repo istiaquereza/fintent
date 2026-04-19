@@ -54,6 +54,10 @@
     h2 {
       font-family: 'Suisse Intl', 'Suisse Int\'l', var(--font);
       font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: #fff;
+      line-height: 1.05;
     }
 
     /* ─── Reset ─────────────────────────────────────────── */
@@ -194,19 +198,26 @@
 
     .nav-dropdown {
       position: absolute;
-      top: calc(100% + 0.4rem);
-      left: 0;
-      background: #1a1a1a;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 0.4rem;
-      min-width: 200px;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      padding-top: 6px;
+      width: 400px;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition: opacity 160ms ease, transform 160ms ease;
-      transform: translateY(-6px);
       z-index: 300;
+    }
+
+    .nav-dropdown-inner {
+      background: #222222;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.7);
     }
 
@@ -214,7 +225,7 @@
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: translateY(0);
+      transform: translateX(-50%) translateY(0);
     }
 
     .nav-dropdown-item {
@@ -222,30 +233,135 @@
       flex-direction: column;
       align-items: flex-start;
       text-align: left;
-      padding: 0.65rem 0.875rem;
-      border-radius: 8px;
+      gap: 12px;
+      padding: 20px;
+      border-radius: 12px;
       transition: background 140ms;
       cursor: pointer;
       text-decoration: none;
     }
 
-    .nav-dropdown-item:hover { background: rgba(255,255,255,0.07); }
+    .nav-dropdown-item:hover { background: #2e2e2e; border-radius: 14px; }
 
     .nav-dropdown-item-title {
       font-size: 0.875rem;
       font-weight: 500;
       color: #fff;
-      margin-bottom: 0.15rem;
       text-align: left;
       width: 100%;
+      display: block;
+      line-height: 1;
     }
 
     .nav-dropdown-item-desc {
       font-size: 0.8rem;
       color: var(--text-2);
       font-weight: 400;
+      line-height: 1;
       text-align: left;
       width: 100%;
+    }
+
+    /* Mega menu */
+    .nav-mega {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      padding-top: 6px;
+      min-width: 540px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      z-index: 300;
+    }
+
+    .nav-mega-inner {
+      background: #222222;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-item:hover .nav-mega {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav-mega-list {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .nav-mega-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px 10px;
+      border-radius: 16px;
+      text-decoration: none;
+      transition: background 140ms;
+      cursor: pointer;
+    }
+
+    .nav-mega-item:hover { background: #2B2B2B; }
+    .nav-mega-item:hover .nav-mega-item-title { color: #fff; }
+    .nav-mega-item:hover .nav-mega-item-icon { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.07); }
+
+    .nav-mega-item-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 140ms, background 140ms;
+    }
+
+    .nav-mega-item-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: rgba(255,255,255,0.6);
+    }
+
+    .nav-mega-item-text { display: flex; flex-direction: column; gap: 2px; }
+    .nav-mega-item-title { font-size: 0.9375rem; font-weight: 700; color: #fff; transition: color 140ms; }
+    .nav-mega-item-desc { font-size: 0.8125rem; color: var(--text-2); font-weight: 400; }
+
+    .nav-mega-visual {
+      width: 200px;
+      flex-shrink: 0;
+      align-self: stretch;
+      background: #2a2a2a;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .nav-mega-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .nav-mega-visual svg {
+      width: 56px;
+      height: 56px;
+      opacity: 0.2;
     }
 
     .nav-right {
@@ -259,21 +375,6 @@
     .hero {
       padding-top: calc(70px + 140px);
       padding-bottom: 70px;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .hero-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      flex-shrink: 0;
     }
 
     .hero h1 {
@@ -409,10 +510,6 @@
     }
 
     .stats-header h2 {
-      font-size: 48px;
-      font-weight: 500;
-      letter-spacing: -0.03em;
-      color: #fff;
       margin-bottom: 0.5rem;
     }
 
@@ -468,10 +565,6 @@
     }
 
     .services-header h2 {
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
-      font-weight: 500;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
       max-width: 20ch;
     }
 
@@ -566,10 +659,6 @@
     .feature-left .label { margin-bottom: 1.5rem; }
 
     .feature-left h2 {
-      font-size: clamp(2rem, 4.5vw, 3.5rem);
-      font-weight: 500;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
       margin-bottom: 1.5rem;
     }
 
@@ -584,7 +673,7 @@
     .feature-right {
       background: var(--bg-1);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 24px;
       overflow: hidden;
     }
 
@@ -667,9 +756,6 @@
     }
 
     .work-header h2 {
-      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-      font-weight: 500;
-      letter-spacing: -0.03em;
     }
 
     .work-link {
@@ -756,9 +842,6 @@
     .process-header { margin-bottom: 3rem; }
 
     .process-header h2 {
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
-      font-weight: 500;
-      letter-spacing: -0.03em;
       margin-top: 1rem;
     }
 
@@ -927,6 +1010,198 @@
       font-weight: 300;
     }
 
+    /* ─── Bento ──────────────────────────────────────────── */
+    .bento {
+      padding: clamp(4rem, 8vw, 7rem) 0;
+    }
+
+    .bento-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .bento-header h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .bento-header p {
+      font-size: 1.125rem;
+      color: var(--text-2);
+      max-width: 40ch;
+      line-height: 1.55;
+    }
+
+    .bento-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .bento-split {
+      display: flex;
+      flex-direction: row;
+      height: 400px;
+      padding: 0;
+    }
+
+    .bento-split-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.5rem;
+    }
+
+    .bento-split-visual {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      border-radius: 0 16px 16px 0;
+    }
+
+    .bento-split > .bento-split-visual:first-child {
+      border-radius: 16px 0 0 16px;
+    }
+
+    .bento-card {
+      background: #1a1a1a;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .bento-card.text-left {
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.5rem;
+      min-height: 320px;
+    }
+
+    .bento-card.visual-right {
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      background: #1e1e1e;
+      min-height: 320px;
+    }
+
+    .bento-card.visual-left {
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      background: #1e1e1e;
+      min-height: 320px;
+    }
+
+    .bento-card.text-right {
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.5rem;
+      min-height: 320px;
+    }
+
+    .bento-card-title {
+      font-size: 1.75rem;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      font-family: 'Suisse Intl', 'Suisse Int\'l', var(--font);
+    }
+
+    .bento-card-desc {
+      font-size: 0.9375rem;
+      color: var(--text-2);
+      line-height: 1.6;
+      max-width: 28ch;
+    }
+
+    .bento-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 150ms;
+      width: fit-content;
+      margin-top: 1.5rem;
+    }
+
+    .bento-card-link:hover { background: rgba(255,255,255,0.14); }
+
+    .bento-mockup {
+      background: #252525;
+      border-radius: 24px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .bento-mockup-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .bento-mockup-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4ADE80, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: #000;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .bento-mockup-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .bento-mockup-sub {
+      font-size: 0.75rem;
+      color: var(--text-2);
+      margin-top: 0.15rem;
+    }
+
+    .bento-form-field {
+      background: #2e2e2e;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .bento-form-btn {
+      background: #3a3a3a;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
     /* ─── FAQ ────────────────────────────────────────────── */
     .faq {
       padding: clamp(4rem, 8vw, 7rem) 0;
@@ -942,10 +1217,6 @@
     .faq-left .label { margin-bottom: 1rem; }
 
     .faq-left h2 {
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
-      font-weight: 500;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
       position: sticky;
       top: 5rem;
     }
@@ -1016,10 +1287,6 @@
     }
 
     .cta-band h2 {
-      font-size: clamp(2.5rem, 6vw, 5.5rem);
-      font-weight: 500;
-      letter-spacing: -0.035em;
-      line-height: 1.0;
       max-width: 18ch;
       margin-bottom: 2.5rem;
     }
@@ -1060,17 +1327,17 @@
     }
 
     .footer-col h4 {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--text-2);
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
       margin-bottom: 1rem;
       letter-spacing: 0.02em;
     }
 
     .footer-col a {
       display: block;
-      font-size: 0.8125rem;
-      color: var(--text-3);
+      font-size: 14px;
+      color: #ffffff70;
       margin-bottom: 0.6rem;
       font-weight: 300;
       transition: color 150ms;
@@ -1153,27 +1420,45 @@
     <nav class="nav">
       <a href="#" class="nav-logo"><img src="public/icon.svg" alt="Fintent" /></a>
       <div class="nav-links">
-        <!-- Product -->
+        <!-- Services mega menu -->
         <div class="nav-item">
           <button class="nav-trigger">
-            Product
-            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 3.5l3 3 3-3"/>
-            </svg>
+            Services
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5l3 3 3-3"/></svg>
           </button>
-          <div class="nav-dropdown">
-            <a href="#" class="nav-dropdown-item">
-              <span class="nav-dropdown-item-title">Test 1</span>
-              <span class="nav-dropdown-item-desc">Description for test option one</span>
-            </a>
-            <a href="#" class="nav-dropdown-item">
-              <span class="nav-dropdown-item-title">Test 2</span>
-              <span class="nav-dropdown-item-desc">Description for test option two</span>
-            </a>
+          <div class="nav-mega">
+            <div class="nav-mega-inner">
+              <div class="nav-mega-list">
+                <a href="#services" class="nav-mega-item"
+                   data-img="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80">
+                  <div class="nav-mega-item-text">
+                    <span class="nav-mega-item-title">Brand Identity</span>
+                    <span class="nav-mega-item-desc">Marks, systems & visual language</span>
+                  </div>
+                </a>
+                <a href="#services" class="nav-mega-item"
+                   data-img="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&q=80">
+                  <div class="nav-mega-item-text">
+                    <span class="nav-mega-item-title">Digital Products</span>
+                    <span class="nav-mega-item-desc">Dashboards, portals & interfaces</span>
+                  </div>
+                </a>
+                <a href="#services" class="nav-mega-item"
+                   data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80">
+                  <div class="nav-mega-item-text">
+                    <span class="nav-mega-item-title">Motion & Data Viz</span>
+                    <span class="nav-mega-item-desc">Charts, animation & narrative data</span>
+                  </div>
+                </a>
+              </div>
+              <div class="nav-mega-visual" id="mega-visual">
+                <img id="mega-visual-img"
+                  src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80"
+                  alt="" />
+              </div>
+            </div>
           </div>
         </div>
-
-        <a href="#services">Services</a>
 
         <!-- Company -->
         <div class="nav-item">
@@ -1184,14 +1469,16 @@
             </svg>
           </button>
           <div class="nav-dropdown">
-            <a href="#" class="nav-dropdown-item">
-              <span class="nav-dropdown-item-title">About</span>
-              <span class="nav-dropdown-item-desc">Our story, mission, and team</span>
-            </a>
-            <a href="#" class="nav-dropdown-item">
-              <span class="nav-dropdown-item-title">Careers</span>
-              <span class="nav-dropdown-item-desc">Join us and shape finance</span>
-            </a>
+            <div class="nav-dropdown-inner">
+              <a href="about.html" class="nav-dropdown-item">
+                <span class="nav-dropdown-item-title">About</span>
+                <span class="nav-dropdown-item-desc">Our story, mission, and team</span>
+              </a>
+              <a href="careers.html" class="nav-dropdown-item">
+                <span class="nav-dropdown-item-title">Careers</span>
+                <span class="nav-dropdown-item-desc">Join us and shape finance</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -1486,6 +1773,66 @@
     </div>
   </section>
 
+  <!-- ── Bento ─────────────────────────────────────────────── -->
+  <section class="bento">
+    <div class="wrap">
+      <div class="bento-header">
+        <h2>Design that works at every layer</h2>
+        <p>From brand to interface to motion — we craft every touchpoint with the precision financial clients expect.</p>
+      </div>
+      <div class="bento-grid">
+
+        <!-- Card 1: full width, text left + visual right -->
+        <div class="bento-card bento-split" style="background:#191919;">
+          <div class="bento-split-text">
+            <div class="bento-card-title">Brand Identity</div>
+            <p class="bento-card-desc">Marks, wordmarks, and full visual systems built for the trust and precision that financial brands demand.</p>
+            <a href="#" class="bento-card-link">Learn more →</a>
+          </div>
+          <div class="bento-split-visual" style="background:#262626;">
+            <div class="bento-mockup">
+              <div class="bento-mockup-row">
+                <div class="bento-mockup-icon">M</div>
+                <div>
+                  <div class="bento-mockup-label">Brand approved</div>
+                  <div class="bento-mockup-sub">Meridian Capital identity — v2.0 delivered</div>
+                </div>
+              </div>
+              <div style="height:1px;background:rgba(255,255,255,0.08);margin:0.75rem 0;"></div>
+              <div style="font-size:0.75rem;color:var(--text-2);margin-bottom:0.5rem;">VISUAL SYSTEM</div>
+              <div style="display:flex;gap:0.5rem;">
+                <div style="height:32px;flex:1;border-radius:6px;background:#fff;"></div>
+                <div style="height:32px;flex:1;border-radius:6px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);"></div>
+                <div style="height:32px;flex:1;border-radius:6px;background:#4ADE80;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: full width, visual left + text right -->
+        <div class="bento-card bento-split" style="background:#191919;">
+          <div class="bento-split-visual" style="background:#262626;">
+            <div class="bento-mockup">
+              <div class="bento-form-field">
+                <span>🇺🇸 &nbsp; Bank account USD (…6448)</span>
+                <span style="color:var(--text-3);">▾</span>
+              </div>
+              <div class="bento-form-btn">
+                <span style="color:#4ADE80;">✓</span> Completed
+              </div>
+            </div>
+          </div>
+          <div class="bento-split-text">
+            <div class="bento-card-title">Digital Products</div>
+            <p class="bento-card-desc">Dashboards, portals, and fintech interfaces where complexity is resolved into elegant, actionable clarity.</p>
+            <a href="#" class="bento-card-link">Learn more →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ── FAQ ───────────────────────────────────────────────── -->
   <section class="faq">
     <div class="wrap">
@@ -1604,6 +1951,126 @@
         if (!isOpen) item.classList.add('open');
       });
     });
+  </script>
+
+  <!-- Services mega menu — image swap on hover -->
+  <script>
+  (function () {
+    var img = document.getElementById('mega-visual-img');
+    if (!img) return;
+    document.querySelectorAll('.nav-mega-item[data-img]').forEach(function (item) {
+      item.addEventListener('mouseenter', function () {
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 180ms ease';
+        setTimeout(function () {
+          img.src = item.dataset.img;
+          img.style.opacity = '1';
+        }, 100);
+      });
+    });
+  })();
+  </script>
+
+  <!-- CMS content injection — reads from admin.html localStorage -->
+  <script>
+  (function () {
+    var saved = localStorage.getItem('fintent_content');
+    if (!saved) return;
+    var d;
+    try { d = JSON.parse(saved); } catch(e) { return; }
+
+    function setText(sel, field) {
+      var el = document.querySelector(sel);
+      if (el && d[field] !== undefined) el.textContent = d[field];
+    }
+    function setAll(sel, fields) {
+      var els = document.querySelectorAll(sel);
+      fields.forEach(function(f, i) {
+        if (els[i] && d[f] !== undefined) els[i].textContent = d[f];
+      });
+    }
+
+    /* ── Hero ── */
+    var h1 = document.querySelector('.hero h1');
+    if (h1) {
+      var firstNode = h1.childNodes[0];
+      if (firstNode && firstNode.nodeType === 3 && d.hero_line1 !== undefined)
+        firstNode.textContent = d.hero_line1;
+      var span = h1.querySelector('span');
+      if (span && d.hero_line2 !== undefined) span.textContent = d.hero_line2;
+    }
+    var heroDesc = document.querySelector('.hero-desc');
+    if (heroDesc && (d.hero_sub1 !== undefined || d.hero_sub2 !== undefined)) {
+      var s1 = d.hero_sub1 !== undefined ? d.hero_sub1
+              : heroDesc.childNodes[0] ? heroDesc.childNodes[0].textContent.trim() : '';
+      var s2 = d.hero_sub2 !== undefined ? d.hero_sub2
+              : heroDesc.childNodes[2] ? heroDesc.childNodes[2].textContent.trim() : '';
+      heroDesc.innerHTML = s1 + '<br>' + s2;
+    }
+    setText('.hero-actions .btn-secondary', 'hero_btn');
+
+    /* ── Stats ── */
+    setText('.stats-header h2', 'stats_title');
+    setText('.stats-header p',  'stats_sub');
+    setAll('.stat-num',  ['stat1_num',  'stat2_num',  'stat3_num']);
+    setAll('.stat-desc', ['stat1_desc', 'stat2_desc', 'stat3_desc']);
+
+    /* ── Services ── */
+    setText('.services-header h2', 'svc_title');
+    setText('.services-header p',  'svc_sub');
+    setAll('.service-title', ['svc1_title', 'svc2_title', 'svc3_title']);
+    setAll('.service-desc',  ['svc1_desc',  'svc2_desc',  'svc3_desc']);
+
+    /* ── Work ── */
+    [
+      ['work1_cat','.work-card-tag',0], ['work1_year','.work-card-year',0],
+      ['work1_title','.work-card-bottom h3',0], ['work1_desc','.work-card-bottom p',0],
+      ['work2_cat','.work-card-tag',1], ['work2_year','.work-card-year',1],
+      ['work2_title','.work-card-bottom h3',1], ['work2_desc','.work-card-bottom p',1],
+      ['work3_cat','.work-card-tag',2], ['work3_year','.work-card-year',2],
+      ['work3_title','.work-card-bottom h3',2], ['work3_desc','.work-card-bottom p',2],
+    ].forEach(function(m) {
+      var els = document.querySelectorAll(m[1]);
+      if (els[m[2]] && d[m[0]] !== undefined) els[m[2]].textContent = d[m[0]];
+    });
+
+    /* ── Pricing ── */
+    setText('.pricing-header h2', 'pricing_title');
+    setText('.pricing-sub',        'pricing_sub');
+    setAll('.price-stat',      ['pc1_stat',      'pc2_stat',      'pc3_stat']);
+    setAll('.price-stat-desc', ['pc1_stat_desc', 'pc2_stat_desc', 'pc3_stat_desc']);
+    setAll('.price-brand',     ['pc1_brand',     'pc2_brand',     'pc3_brand']);
+    setAll('.price-brand-desc',['pc1_brand_desc','pc2_brand_desc','pc3_brand_desc']);
+
+    /* ── FAQ ── */
+    var faqQs = document.querySelectorAll('.faq-question');
+    var faqAs = document.querySelectorAll('.faq-answer-inner');
+    for (var i = 1; i <= 5; i++) {
+      var qf = 'faq' + i + '_q', af = 'faq' + i + '_a';
+      if (faqQs[i-1] && d[qf] !== undefined) {
+        var icon = faqQs[i-1].querySelector('.faq-icon');
+        faqQs[i-1].textContent = d[qf];
+        if (icon) faqQs[i-1].appendChild(icon);
+      }
+      if (faqAs[i-1] && d[af] !== undefined) faqAs[i-1].textContent = d[af];
+    }
+
+    /* ── CTA Band ── */
+    var ctaH2 = document.querySelector('.cta-band h2');
+    if (ctaH2 && (d.cta_h1 !== undefined || d.cta_h2 !== undefined || d.cta_h3 !== undefined)) {
+      var l1 = d.cta_h1 !== undefined ? d.cta_h1 : 'Ready to build a';
+      var l2 = d.cta_h2 !== undefined ? d.cta_h2 : 'more intentional';
+      var l3 = d.cta_h3 !== undefined ? d.cta_h3 : 'financial brand?';
+      ctaH2.innerHTML = l1 + ' <span>' + l2 + '</span> ' + l3;
+    }
+    var ctaBtns = document.querySelectorAll('.cta-band-actions .btn');
+    if (ctaBtns[0] && d.cta_btn1 !== undefined) ctaBtns[0].textContent = d.cta_btn1;
+    if (ctaBtns[1] && d.cta_btn2 !== undefined) ctaBtns[1].textContent = d.cta_btn2;
+    if (d.footer_email !== undefined && ctaBtns[0]) ctaBtns[0].href = 'mailto:' + d.footer_email;
+
+    /* ── Footer ── */
+    setText('.footer-brand-desc', 'footer_tag');
+  })();
   </script>
 
 </body>

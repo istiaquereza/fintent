@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fintent Admin</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=neue-montreal@300,400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:      #0d0d0d;
+      --bg-1:    #111111;
+      --bg-2:    #191919;
+      --bg-3:    #222222;
+      --text:    #ffffff;
+      --text-2:  #888888;
+      --text-3:  #444444;
+      --border:  rgba(255,255,255,0.08);
+      --border-2:rgba(255,255,255,0.14);
+      --green:   #4ADE80;
+      --blue:    #60A5FA;
+      --font:    'Neue Montreal', -apple-system, BlinkMacSystemFont, sans-serif;
+      --sidebar: 240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; display: flex; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar);
+      flex-shrink: 0;
+      background: var(--bg-1);
+      border-right: 1px solid var(--border);
+      height: 100vh;
+      position: fixed;
+      left: 0; top: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 1.25rem 1.25rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-logo img { height: 18px; }
+
+    .sidebar-logo-label {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-section {
+      padding: 1rem 0.75rem 0.5rem;
+    }
+
+    .sidebar-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      padding: 0 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      background: none;
+      border: none;
+      color: var(--text-2);
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background 140ms, color 140ms;
+    }
+
+    .nav-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .nav-btn.active { background: rgba(255,255,255,0.08); color: #fff; }
+
+    .nav-btn svg { width: 14px; height: 14px; opacity: 0.6; flex-shrink: 0; }
+    .nav-btn.active svg { opacity: 1; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 1rem 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .preview-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 8px;
+      background: #fff;
+      color: #000;
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: opacity 140ms;
+    }
+
+    .preview-btn:hover { opacity: 0.88; }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 56px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      background: var(--bg-1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar-title { font-size: 0.9375rem; font-weight: 500; }
+    .topbar-subtitle { font-size: 0.8125rem; color: var(--text-3); margin-top: 0.1rem; }
+
+    .topbar-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    .btn-reset {
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      background: none;
+      border: 1px solid var(--border-2);
+      color: var(--text-2);
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 140ms;
+    }
+    .btn-reset:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    .btn-save {
+      padding: 0.45rem 1.25rem;
+      border-radius: 6px;
+      background: var(--green);
+      color: #000;
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: opacity 140ms;
+    }
+    .btn-save:hover { opacity: 0.85; }
+
+    .save-indicator {
+      font-size: 0.75rem;
+      color: var(--green);
+      opacity: 0;
+      transition: opacity 300ms;
+    }
+    .save-indicator.show { opacity: 1; }
+
+    /* ── Content ── */
+    .content {
+      padding: 2rem;
+      max-width: 800px;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-heading {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .panel-desc {
+      font-size: 0.875rem;
+      color: var(--text-2);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Form ── */
+    .field-group {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .field-group-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field {
+      margin-bottom: 1.25rem;
+    }
+
+    .field:last-child { margin-bottom: 0; }
+
+    .field label {
+      display: block;
+      font-size: 0.8125rem;
+      color: var(--text-2);
+      margin-bottom: 0.4rem;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.625rem 0.875rem;
+      color: #fff;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 140ms;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus { border-color: rgba(255,255,255,0.3); }
+
+    .field textarea { min-height: 80px; line-height: 1.5; }
+
+    .fields-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .fields-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* ── Card grid ── */
+    .card-editors {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card-editor {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card-editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.875rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .card-editor-header:hover { background: rgba(255,255,255,0.02); }
+
+    .card-editor-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .card-editor-chevron {
+      width: 14px;
+      height: 14px;
+      color: var(--text-3);
+      transition: transform 200ms;
+    }
+
+    .card-editor.open .card-editor-chevron { transform: rotate(180deg); }
+
+    .card-editor-body {
+      display: none;
+      padding: 1.25rem;
+    }
+
+    .card-editor.open .card-editor-body { display: block; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--bg-3);
+      border: 1px solid var(--border-2);
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.875rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 250ms, transform 250ms;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="public/icon.svg" alt="Fintent" />
+    <span class="sidebar-logo-label">Admin</span>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Pages</div>
+    <button class="nav-btn active" onclick="showPanel('hero')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      Hero
+    </button>
+    <button class="nav-btn" onclick="showPanel('stats')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+      Stats
+    </button>
+    <button class="nav-btn" onclick="showPanel('services')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Services
+    </button>
+    <button class="nav-btn" onclick="showPanel('work')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      Selected Work
+    </button>
+    <button class="nav-btn" onclick="showPanel('pricing')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Pricing
+    </button>
+    <button class="nav-btn" onclick="showPanel('faq')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      FAQ
+    </button>
+    <button class="nav-btn" onclick="showPanel('feature')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      Feature
+    </button>
+    <button class="nav-btn" onclick="showPanel('process')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Process
+    </button>
+    <button class="nav-btn" onclick="showPanel('testimonial')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Testimonial
+    </button>
+    <button class="nav-btn" onclick="showPanel('bento')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="8" rx="1"/><rect x="14" y="15" width="7" height="6" rx="1"/></svg>
+      Bento Grid
+    </button>
+    <button class="nav-btn" onclick="showPanel('cta')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.13 6.13l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      CTA & Footer
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Inner Pages</div>
+    <button class="nav-btn" onclick="showPanel('about')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      About
+    </button>
+    <button class="nav-btn" onclick="showPanel('careers')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      Careers
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <a href="index.html" target="_blank" class="preview-btn">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Open Site
+    </a>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">Hero</div>
+      <div class="topbar-subtitle">Edit homepage hero section</div>
+    </div>
+    <div class="topbar-actions">
+      <span class="save-indicator" id="save-indicator">✓ Saved</span>
+      <button class="btn-reset" onclick="resetSection()">Reset</button>
+      <button class="btn-save" onclick="saveAll()">Save changes</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="panel active" id="panel-hero">
+      <div class="panel-heading">Hero Section</div>
+      <div class="panel-desc">Main headline and subtext on the homepage.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">Headline</div>
+        <div class="field">
+          <label>Line 1</label>
+          <input type="text" id="hero_line1" value="Solution we crafted to" />
+        </div>
+        <div class="field">
+          <label>Line 2 (dimmed)</label>
+          <input type="text" id="hero_line2" value="make human lifes easier" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-label">Subtext</div>
+        <div class="field">
+          <label>Line 1</label>
+          <input type="text" id="hero_sub1" value="We build brand identities, digital products, and data experiences" />
+        </div>
+        <div class="field">
+          <label>Line 2</label>
+          <input type="text" id="hero_sub2" value="for institutions who believe clarity is the ultimate advantage." />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-label">Button</div>
+        <div class="field">
+          <label>Button label</label>
+          <input type="text" id="hero_btn" value="Contact us" />
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel" id="panel-stats">
+      <div class="panel-heading">Proven at Scale</div>
+      <div class="panel-desc">Section heading and 3 stat cards.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">Section Header</div>
+        <div class="field">
+          <label>Title</label>
+          <input type="text" id="stats_title" value="Proven at scale" />
+        </div>
+        <div class="field">
+          <label>Subtitle</label>
+          <textarea id="stats_sub">Fintent has shaped brands for billions in AUM, for dozens of clients, across every major financial market.</textarea>
+        </div>
+      </div>
+
+      <div class="card-editors">
+        <div class="card-editor open">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Stat 1</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Number</label><input type="text" id="stat1_num" value="$2.1T+" /></div>
+              <div class="field"><label>Description</label><input type="text" id="stat1_desc" value="AUM represented by clients we've designed for" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Stat 2</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Number</label><input type="text" id="stat2_num" value="84+" /></div>
+              <div class="field"><label>Description</label><input type="text" id="stat2_desc" value="Financial brands shaped since 2018" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Stat 3</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Number</label><input type="text" id="stat3_num" value="99%" /></div>
+              <div class="field"><label>Description</label><input type="text" id="stat3_desc" value="Client retention — great design compounds" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="panel" id="panel-services">
+      <div class="panel-heading">Services</div>
+      <div class="panel-desc">The three core service offerings.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">Section Header</div>
+        <div class="field"><label>Title</label><input type="text" id="svc_title" value="Everything your financial brand needs." /></div>
+        <div class="field"><label>Subtitle</label><textarea id="svc_sub">From seed-stage fintechs to global asset managers — we design across every touchpoint with precision, clarity, and intent.</textarea></div>
+      </div>
+
+      <div class="card-editors">
+        <div class="card-editor open">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Service 1 — Brand Identity</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Title</label><input type="text" id="svc1_title" value="Brand Identity" /></div>
+            <div class="field"><label>Description</label><textarea id="svc1_desc">Marks, wordmarks, and full visual systems built for the trust and precision that financial brands demand.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Service 2 — Digital Products</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Title</label><input type="text" id="svc2_title" value="Digital Products" /></div>
+            <div class="field"><label>Description</label><textarea id="svc2_desc">Dashboards, portals, and fintech interfaces where complexity is resolved into elegant, actionable clarity.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Service 3 — Motion & Data Viz</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Title</label><input type="text" id="svc3_title" value="Motion & Data Viz" /></div>
+            <div class="field"><label>Description</label><textarea id="svc3_desc">Charts, animations, and narrative data experiences that transform dense numbers into compelling stories.</textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORK -->
+    <div class="panel" id="panel-work">
+      <div class="panel-heading">Selected Work</div>
+      <div class="panel-desc">Portfolio project cards shown on homepage.</div>
+
+      <div class="card-editors">
+        <div class="card-editor open">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Project 1</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Category</label><input type="text" id="work1_cat" value="Brand Identity" /></div>
+              <div class="field"><label>Year</label><input type="text" id="work1_year" value="2026" /></div>
+            </div>
+            <div class="field"><label>Project Title</label><input type="text" id="work1_title" value="Meridian Capital Partners" /></div>
+            <div class="field"><label>Description</label><input type="text" id="work1_desc" value="Full rebrand for a global private equity firm" /></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Project 2</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Category</label><input type="text" id="work2_cat" value="Digital Product" /></div>
+              <div class="field"><label>Year</label><input type="text" id="work2_year" value="2025" /></div>
+            </div>
+            <div class="field"><label>Project Title</label><input type="text" id="work2_title" value="Vault Dashboard" /></div>
+            <div class="field"><label>Description</label><input type="text" id="work2_desc" value="Wealth management UI for HNWI" /></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Project 3</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Category</label><input type="text" id="work3_cat" value="Motion Design" /></div>
+              <div class="field"><label>Year</label><input type="text" id="work3_year" value="2025" /></div>
+            </div>
+            <div class="field"><label>Project Title</label><input type="text" id="work3_title" value="Arcta — IPO" /></div>
+            <div class="field"><label>Description</label><input type="text" id="work3_desc" value="Motion identity for public market debut" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="panel" id="panel-pricing">
+      <div class="panel-heading">Pricing / Case Studies</div>
+      <div class="panel-desc">Section heading and 3 feature cards.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">Section Header</div>
+        <div class="field"><label>Title</label><input type="text" id="pricing_title" value="Financial brands that scale with Fintent" /></div>
+        <div class="field"><label>Subtitle</label><textarea id="pricing_sub">The fastest growing, most ambitious financial brands build their identity with Fintent.</textarea></div>
+      </div>
+
+      <div class="card-editors">
+        <div class="card-editor open">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Card 1 — Brand Identity</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Stat</label><input type="text" id="pc1_stat" value="84+" /></div>
+              <div class="field"><label>Stat Description</label><input type="text" id="pc1_stat_desc" value="brands launched globally" /></div>
+            </div>
+            <div class="field"><label>Brand Name</label><input type="text" id="pc1_brand" value="Meridian Capital" /></div>
+            <div class="field"><label>Brand Description</label><textarea id="pc1_brand_desc">Meridian partnered with Fintent to rebuild their brand from the ground up ahead of a Series B raise.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Card 2 — Digital Products</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Stat</label><input type="text" id="pc2_stat" value="$2.1T+" /></div>
+              <div class="field"><label>Stat Description</label><input type="text" id="pc2_stat_desc" value="AUM on platforms we've designed" /></div>
+            </div>
+            <div class="field"><label>Brand Name</label><input type="text" id="pc2_brand" value="Vault Dashboard" /></div>
+            <div class="field"><label>Brand Description</label><textarea id="pc2_brand_desc">Vault's wealth management platform serves HNWI clients with a Fintent-designed interface built for trust.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Card 3 — Motion & Data Viz</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="fields-row">
+              <div class="field"><label>Stat</label><input type="text" id="pc3_stat" value="99%" /></div>
+              <div class="field"><label>Stat Description</label><input type="text" id="pc3_stat_desc" value="client retention rate" /></div>
+            </div>
+            <div class="field"><label>Brand Name</label><input type="text" id="pc3_brand" value="Arcta — IPO Kit" /></div>
+            <div class="field"><label>Brand Description</label><textarea id="pc3_brand_desc">Arcta's public market debut was backed by Fintent motion work that made complex data feel human.</textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="panel" id="panel-faq">
+      <div class="panel-heading">FAQ</div>
+      <div class="panel-desc">Questions and answers shown on homepage.</div>
+
+      <div class="card-editors" id="faq-cards">
+        <div class="card-editor open">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Question 1</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Question</label><input type="text" id="faq1_q" value="Do I need a credit card to start?" /></div>
+            <div class="field"><label>Answer</label><textarea id="faq1_a">No credit card required. Start a 14-day free trial instantly — just sign up with your email and explore everything Fintent has to offer.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Question 2</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Question</label><input type="text" id="faq2_q" value="What kind of companies do you work with?" /></div>
+            <div class="field"><label>Answer</label><textarea id="faq2_a">We work exclusively with financial organisations — from early-stage fintech startups to global asset managers, private equity firms, and investment banks.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Question 3</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Question</label><input type="text" id="faq3_q" value="How long does a typical brand project take?" /></div>
+            <div class="field"><label>Answer</label><textarea id="faq3_a">A full brand identity engagement typically runs 6–10 weeks depending on scope. Digital product design projects vary based on complexity and are scoped individually.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Question 4</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Question</label><input type="text" id="faq4_q" value="Do you offer ongoing retainer partnerships?" /></div>
+            <div class="field"><label>Answer</label><textarea id="faq4_a">Yes. Many of our clients retain us on a monthly basis for continuous design support — from maintaining design systems to producing investor materials and campaign assets.</textarea></div>
+          </div>
+        </div>
+        <div class="card-editor">
+          <div class="card-editor-header" onclick="toggleCard(this)">
+            <span class="card-editor-title">Question 5</span>
+            <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="card-editor-body">
+            <div class="field"><label>Question</label><input type="text" id="faq5_q" value="Can you work with our in-house team?" /></div>
+            <div class="field"><label>Answer</label><textarea id="faq5_a">Absolutely. We regularly embed alongside internal design and marketing teams, providing senior-level design direction, execution, and knowledge transfer.</textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="panel" id="panel-cta">
+      <div class="panel-heading">CTA & Footer</div>
+      <div class="panel-desc">Bottom call-to-action and footer details.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">CTA Band</div>
+        <div class="field"><label>Heading line 1</label><input type="text" id="cta_h1" value="Ready to build a" /></div>
+        <div class="field"><label>Heading line 2 (dimmed)</label><input type="text" id="cta_h2" value="more intentional" /></div>
+        <div class="field"><label>Heading line 3</label><input type="text" id="cta_h3" value="financial brand?" /></div>
+        <div class="fields-row">
+          <div class="field"><label>Primary button</label><input type="text" id="cta_btn1" value="Start free trial" /></div>
+          <div class="field"><label>Secondary button</label><input type="text" id="cta_btn2" value="Book a demo →" /></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-label">Footer</div>
+        <div class="field"><label>Brand tagline</label><input type="text" id="footer_tag" value="Finance design, by intention. London · New York · Singapore" /></div>
+        <div class="field"><label>Contact email</label><input type="text" id="footer_email" value="hello@fintent.co" /></div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="panel" id="panel-about">
+      <div class="panel-heading">About Page</div>
+      <div class="panel-desc">Content for the About page.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">Hero</div>
+        <div class="field"><label>Page title</label><input type="text" id="about_title" value="We design for those who move capital." /></div>
+        <div class="field"><label>Subtitle</label><textarea id="about_sub">Fintent is a specialist design studio working exclusively within the financial sector — helping organisations articulate their value with rigour, restraint, and intention.</textarea></div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-label">Story Section</div>
+        <div class="field"><label>Heading</label><input type="text" id="about_story_h" value="Built for finance. Built with purpose." /></div>
+        <div class="field"><label>Paragraph 1</label><textarea id="about_story_p1">Fintent was founded in 2026 with a single belief: that financial brands deserve design that matches their ambition. Too often, the sector settles for generic — safe palettes, forgettable logos, interfaces that obscure rather than clarify.</textarea></div>
+        <div class="field"><label>Paragraph 2</label><textarea id="about_story_p2">We exist to change that. Every engagement starts with deep sector knowledge and ends with work that earns the trust of clients, investors, and partners.</textarea></div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-label">Team Members</div>
+        <div class="card-editors">
+          <div class="card-editor open">
+            <div class="card-editor-header" onclick="toggleCard(this)">
+              <span class="card-editor-title">Member 1</span>
+              <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="card-editor-body">
+              <div class="fields-row">
+                <div class="field"><label>Name</label><input type="text" id="team1_name" value="Istiaque Reza" /></div>
+                <div class="field"><label>Role</label><input type="text" id="team1_role" value="Founder & Design Director" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-editor">
+            <div class="card-editor-header" onclick="toggleCard(this)">
+              <span class="card-editor-title">Member 2</span>
+              <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="card-editor-body">
+              <div class="fields-row">
+                <div class="field"><label>Name</label><input type="text" id="team2_name" value="Sara Melin" /></div>
+                <div class="field"><label>Role</label><input type="text" id="team2_role" value="Senior Brand Designer" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-editor">
+            <div class="card-editor-header" onclick="toggleCard(this)">
+              <span class="card-editor-title">Member 3</span>
+              <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="card-editor-body">
+              <div class="fields-row">
+                <div class="field"><label>Name</label><input type="text" id="team3_name" value="James Kho" /></div>
+                <div class="field"><label>Role</label><input type="text" id="team3_role" value="Product Design Lead" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAREERS -->
+    <div class="panel" id="panel-careers">
+      <div class="panel-heading">Careers Page</div>
+      <div class="panel-desc">Content for the Careers page.</div>
+
+      <div class="field-group">
+        <div class="field-group-label">Hero</div>
+        <div class="field"><label>Page title</label><input type="text" id="careers_title" value="Shape how finance tells its story." /></div>
+        <div class="field"><label>Subtitle</label><textarea id="careers_sub">We're a small, senior team doing some of the most interesting design work in the financial sector. If you care deeply about craft, we'd love to hear from you.</textarea></div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-label">Open Roles</div>
+        <div class="card-editors">
+          <div class="card-editor open">
+            <div class="card-editor-header" onclick="toggleCard(this)">
+              <span class="card-editor-title">Role 1</span>
+              <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="card-editor-body">
+              <div class="field"><label>Job Title</label><input type="text" id="role1_title" value="Senior Brand Designer" /></div>
+              <div class="fields-row-3">
+                <div class="field"><label>Type</label><input type="text" id="role1_type" value="Full-time" /></div>
+                <div class="field"><label>Mode</label><input type="text" id="role1_mode" value="Remote" /></div>
+                <div class="field"><label>Location</label><input type="text" id="role1_loc" value="London / NYC" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-editor">
+            <div class="card-editor-header" onclick="toggleCard(this)">
+              <span class="card-editor-title">Role 2</span>
+              <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="card-editor-body">
+              <div class="field"><label>Job Title</label><input type="text" id="role2_title" value="Product Design Lead" /></div>
+              <div class="fields-row-3">
+                <div class="field"><label>Type</label><input type="text" id="role2_type" value="Full-time" /></div>
+                <div class="field"><label>Mode</label><input type="text" id="role2_mode" value="Remote" /></div>
+                <div class="field"><label>Location</label><input type="text" id="role2_loc" value="Global" /></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-editor">
+            <div class="card-editor-header" onclick="toggleCard(this)">
+              <span class="card-editor-title">Role 3</span>
+              <svg class="card-editor-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="card-editor-body">
+              <div class="field"><label>Job Title</label><input type="text" id="role3_title" value="Motion Designer" /></div>
+              <div class="fields-row-3">
+                <div class="field"><label>Type</label><input type="text" id="role3_type" value="Contract" /></div>
+                <div class="field"><label>Mode</label><input type="text" id="role3_mode" value="Remote" /></div>
+                <div class="field"><label>Location</label><input type="text" id="role3_loc" value="Part-time" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span>Changes saved to localStorage</span>
+</div>
+
+<script>
+  const panels = ['hero','stats','services','work','pricing','faq','cta','about','careers'];
+  const panelTitles = {
+    hero: ['Hero','Edit homepage hero section'],
+    stats: ['Stats','Edit the Proven at Scale section'],
+    services: ['Services','Edit the services section'],
+    work: ['Selected Work','Edit portfolio project cards'],
+    pricing: ['Pricing','Edit the case study cards'],
+    faq: ['FAQ','Edit questions and answers'],
+    cta: ['CTA & Footer','Edit bottom CTA and footer'],
+    about: ['About Page','Edit the About page content'],
+    careers: ['Careers Page','Edit the Careers page content'],
+  };
+
+  function showPanel(name) {
+    panels.forEach(p => {
+      document.getElementById('panel-' + p).classList.remove('active');
+    });
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+    document.getElementById('topbar-title').textContent = panelTitles[name][0];
+    document.querySelector('.topbar-subtitle').textContent = panelTitles[name][1];
+  }
+
+  function toggleCard(header) {
+    const card = header.closest('.card-editor');
+    card.classList.toggle('open');
+  }
+
+  function getAllFields() {
+    const data = {};
+    document.querySelectorAll('input[id], textarea[id]').forEach(el => {
+      data[el.id] = el.value;
+    });
+    return data;
+  }
+
+  function loadFromStorage() {
+    const saved = localStorage.getItem('fintent_content');
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    Object.entries(data).forEach(([key, val]) => {
+      const el = document.getElementById(key);
+      if (el) el.value = val;
+    });
+  }
+
+  function saveAll() {
+    const data = getAllFields();
+    localStorage.setItem('fintent_content', JSON.stringify(data));
+    showToast();
+  }
+
+  function resetSection() {
+    if (confirm('Reset all fields to default values?')) {
+      localStorage.removeItem('fintent_content');
+      location.reload();
+    }
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Load on start
+  loadFromStorage();
+</script>
+
+</body>
+</html>
